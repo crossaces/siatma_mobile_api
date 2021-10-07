@@ -6,6 +6,7 @@ namespace siatma_mobile_api.DAO
 {
     public class MhsDAO
     {
+       
         public dynamic GetDataPrfMhs(string npm)
         {
             SqlConnection conn = new();

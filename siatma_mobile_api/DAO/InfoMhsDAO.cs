@@ -6,6 +6,107 @@ namespace siatma_mobile_api.DAO
 {
     public class InfoMhsDAO
     {
+
+        public dynamic GetPresensiMahasiswa(string npm, string semester)
+        {
+            SqlConnection conn = new();
+            try
+            {
+                conn = new SqlConnection(DBKoneksi.koneksi);
+                string query = @" SELECT TBL_KELAS.NAMA_MK AS[MATA KULIAH], TBL_KELAS.KELAS AS KLS,
+                          coalesce(TBL_PRESENSI.Status1, TBL_PRESENSI.Status1, TBL_PRESENSI.Status1,'-') AS[1],
+                         coalesce(TBL_PRESENSI.Status2, TBL_PRESENSI.Status2, TBL_PRESENSI.Status2,'-') AS[2], 
+                         coalesce(TBL_PRESENSI.Status3, TBL_PRESENSI.Status3, TBL_PRESENSI.Status3,'-') AS[3], 
+                         coalesce(TBL_PRESENSI.Status4, TBL_PRESENSI.Status4, TBL_PRESENSI.Status4,'-') AS[4], 
+                         coalesce(TBL_PRESENSI.Status5, TBL_PRESENSI.Status5, TBL_PRESENSI.Status5,'-') AS[5], 
+                         coalesce(TBL_PRESENSI.Status6, TBL_PRESENSI.Status6, TBL_PRESENSI.Status6,'-') AS[6], 
+                         coalesce(TBL_PRESENSI.Status7, TBL_PRESENSI.Status7, TBL_PRESENSI.Status7,'-') AS[7], 
+                         coalesce(TBL_PRESENSI.Status8, TBL_PRESENSI.Status8, TBL_PRESENSI.Status8,'-') AS[8], 
+                         coalesce(TBL_PRESENSI.Status9, TBL_PRESENSI.Status9, TBL_PRESENSI.Status9,'-') AS[9], 
+                         coalesce(TBL_PRESENSI.Status10, TBL_PRESENSI.Status10, TBL_PRESENSI.Status10,'-') AS[10],
+                         coalesce(TBL_PRESENSI.Status11, TBL_PRESENSI.Status11, TBL_PRESENSI.Status11,'-') AS[11], 
+                         coalesce(TBL_PRESENSI.Status12, TBL_PRESENSI.Status12, TBL_PRESENSI.Status12,'-') AS[12], 
+                         coalesce(TBL_PRESENSI.Status13, TBL_PRESENSI.Status13, TBL_PRESENSI.Status13,'-') AS[13],
+                         coalesce(TBL_PRESENSI.Status14, TBL_PRESENSI.Status14, TBL_PRESENSI.Status14,'-') AS[14], 
+                         coalesce(TBL_PRESENSI.Status15, TBL_PRESENSI.Status15, TBL_PRESENSI.Status15,'-') AS[15], 
+                         coalesce(TBL_PRESENSI.Status16, TBL_PRESENSI.Status16, TBL_PRESENSI.Status16,'-') AS[16], 
+                      coalesce(TBL_PRESENSI.Status17, TBL_PRESENSI.Status17, TBL_PRESENSI.Status17,'-') AS[17],                          
+					  coalesce(TBL_PRESENSI.Status18, TBL_PRESENSI.Status18, TBL_PRESENSI.Status18,'-') AS[18], 
+                    coalesce(TBL_PRESENSI.Status19, TBL_PRESENSI.Status19, TBL_PRESENSI.Status19,'-') AS[19], 
+                         coalesce(TBL_PRESENSI.Status20, TBL_PRESENSI.Status20, TBL_PRESENSI.Status20,'-') AS[20], 
+                         coalesce(TBL_PRESENSI.Status21, TBL_PRESENSI.Status21, TBL_PRESENSI.Status21,'-') AS[21],                         
+						 coalesce(TBL_PRESENSI.Status22, TBL_PRESENSI.Status22, TBL_PRESENSI.Status22,'-') AS[22], 
+                         coalesce(TBL_PRESENSI.Status23, TBL_PRESENSI.Status23, TBL_PRESENSI.Status23,'-') AS[23], 
+                         coalesce(TBL_PRESENSI.Status24, TBL_PRESENSI.Status24, TBL_PRESENSI.Status24,'-') AS[24], 
+                         coalesce(TBL_PRESENSI.Status25, TBL_PRESENSI.Status25, TBL_PRESENSI.Status25,'-') AS[25],
+                         coalesce(TBL_PRESENSI.Status26, TBL_PRESENSI.Status26, TBL_PRESENSI.Status26,'-') AS[26], 
+                         coalesce(TBL_PRESENSI.Status27, TBL_PRESENSI.Status27, TBL_PRESENSI.Status27,'-') AS[27], 
+                         coalesce(TBL_PRESENSI.Status28, TBL_PRESENSI.Status28, TBL_PRESENSI.Status28,'-') AS[28],
+rekap_presensi.hadir, rekap_presensi.Alpha, rekap_presensi.Ijin, rekap_presensi.Total
+ FROM TBL_KELAS INNER JOIN rekap_presensi ON rekap_presensi.ID_Kelas = TBL_KELAS.ID_KELAS INNER JOIN
+TBL_PRESENSI ON rekap_presensi.ID_Kelas = TBL_PRESENSI.ID_Kelas AND rekap_presensi.ID_Kelas = TBL_PRESENSI.ID_Kelas AND rekap_presensi.NPM = TBL_PRESENSI.NPM INNER JOIN
+ TBL_SEMESTER_AKADEMIK ON TBL_SEMESTER_AKADEMIK.NO_SEMESTER = TBL_KELAS.NO_SEMESTER AND TBL_SEMESTER_AKADEMIK.ID_TAHUN_AKADEMIK = TBL_KELAS.ID_TAHUN_AKADEMIK WHERE (TBL_PRESENSI.NPM = '180709677')and(SEMESTER_AKADEMIk= '"+ semester+ "')";
+
+                var param = new { npm = npm , semester = semester};
+
+                var data = conn.Query(query, param);
+
+                return data;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+            finally
+            {
+                conn.Dispose();
+            }
+        }
+       
+        public dynamic GetDataTahunAkademik(string masuk, string prodi)
+        {
+            SqlConnection conn = new();
+           
+            try
+            {
+                conn = new SqlConnection(DBKoneksi.koneksi);
+
+
+                if (prodi == "70")
+                {
+                    string query = @"SELECT     dbo.TBL_SEMESTER_AKADEMIK.SEMESTER_AKADEMIk 
+                    FROM         dbo.TBL_SEMESTER_AKADEMIK INNER JOIN  
+                    dbo.TBL_TAHUN_AKADEMIK ON dbo.TBL_SEMESTER_AKADEMIK.ID_TAHUN_AKADEMIK = dbo.TBL_TAHUN_AKADEMIK.ID_TAHUN_AKADEMIK 
+                    WHERE     (dbo.TBL_TAHUN_AKADEMIK.ID_TAHUN_AKADEMIK >= '" + @masuk + "') ORDER BY dbo.TBL_TAHUN_AKADEMIK.ID_TAHUN_AKADEMIK DESC, dbo.TBL_SEMESTER_AKADEMIK.SEMESTER_AKADEMIk DESC";
+                    var param = new { masuk = masuk };
+                    var data = conn.Query(query, param);
+
+                    return data;
+                }
+                else
+                {
+                    string query1 = @"SELECT     dbo.TBL_SEMESTER_AKADEMIK.SEMESTER_AKADEMIk
+                    FROM         dbo.TBL_SEMESTER_AKADEMIK INNER JOIN
+                                    dbo.TBL_TAHUN_AKADEMIK ON dbo.TBL_SEMESTER_AKADEMIK.ID_TAHUN_AKADEMIK = dbo.TBL_TAHUN_AKADEMIK.ID_TAHUN_AKADEMIK
+                    WHERE     (dbo.TBL_TAHUN_AKADEMIK.ID_TAHUN_AKADEMIK >='" + @masuk + "') ORDER BY dbo.TBL_TAHUN_AKADEMIK.ID_TAHUN_AKADEMIK DESC, dbo.TBL_SEMESTER_AKADEMIK.SEMESTER_AKADEMIk DESC";
+                    var param = new { masuk = masuk };
+                    var data = conn.Query(query1, param);
+
+                    return data;
+                }
+
+
+               
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+            finally
+            {
+                conn.Dispose();
+            }
+        }
         public dynamic GetInfoMhsDHS(string npm)
         {
             SqlConnection conn = new();
