@@ -59,5 +59,46 @@ namespace siatma_mobile_api.Controllers
             }
         }
 
+
+        [HttpGet("SKSMAT")]
+        public ActionResult JumlahMatkulSKS()
+        {
+            try
+            {
+                var npm = User.Claims
+                        .Where(c => c.Type == "username")
+                            .Select(c => c.Value).SingleOrDefault();
+
+                var data = bm.GetJumlahSKSdanMatkul(npm);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpGet("infomhs")]
+        public ActionResult infomahasiswal()
+        {
+            try
+            {
+                var npm = User.Claims
+                        .Where(c => c.Type == "username")
+                            .Select(c => c.Value).SingleOrDefault();
+
+                var data = bm.getInfoMahasiswa(npm);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+
+
     }
 }

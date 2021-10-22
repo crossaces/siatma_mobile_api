@@ -29,7 +29,7 @@ namespace siatma_mobile_api.DAO
                       dbo.TBL_KRS ON dbo.TBL_KELAS.ID_KELAS = dbo.TBL_KRS.ID_KELAS INNER JOIN
                       dbo.TBL_SEMESTER_AKADEMIK ON dbo.TBL_KELAS.ID_TAHUN_AKADEMIK = dbo.TBL_SEMESTER_AKADEMIK.ID_TAHUN_AKADEMIK AND 
                       dbo.TBL_KELAS.NO_SEMESTER = dbo.TBL_SEMESTER_AKADEMIK.NO_SEMESTER
-                      WHERE (TBL_SEMESTER_AKADEMIK.SEMESTER_AKADEMIk = '" + @smt + "') AND (TBL_KRS.NPM ='" + @npm + "')";
+                      WHERE (TBL_SEMESTER_AKADEMIK.SEMESTER_AKADEMIk = '" + @smt + "') AND (TBL_KRS.NPM ='" + @npm + "') Order by MATAKULIAH";
 
                 var param = new { npm = npm, smt = smt };
 

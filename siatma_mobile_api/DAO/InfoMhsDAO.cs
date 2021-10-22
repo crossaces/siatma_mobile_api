@@ -45,7 +45,7 @@ namespace siatma_mobile_api.DAO
 rekap_presensi.hadir, rekap_presensi.Alpha, rekap_presensi.Ijin, rekap_presensi.Total
  FROM TBL_KELAS INNER JOIN rekap_presensi ON rekap_presensi.ID_Kelas = TBL_KELAS.ID_KELAS INNER JOIN
 TBL_PRESENSI ON rekap_presensi.ID_Kelas = TBL_PRESENSI.ID_Kelas AND rekap_presensi.ID_Kelas = TBL_PRESENSI.ID_Kelas AND rekap_presensi.NPM = TBL_PRESENSI.NPM INNER JOIN
- TBL_SEMESTER_AKADEMIK ON TBL_SEMESTER_AKADEMIK.NO_SEMESTER = TBL_KELAS.NO_SEMESTER AND TBL_SEMESTER_AKADEMIK.ID_TAHUN_AKADEMIK = TBL_KELAS.ID_TAHUN_AKADEMIK WHERE (TBL_PRESENSI.NPM = '180709677')and(SEMESTER_AKADEMIk= '"+ semester+ "')";
+ TBL_SEMESTER_AKADEMIK ON TBL_SEMESTER_AKADEMIK.NO_SEMESTER = TBL_KELAS.NO_SEMESTER AND TBL_SEMESTER_AKADEMIK.ID_TAHUN_AKADEMIK = TBL_KELAS.ID_TAHUN_AKADEMIK WHERE (TBL_PRESENSI.NPM = '" + @npm + "')and(SEMESTER_AKADEMIk= '" + @semester+ "') ORDER BY [MATA KULIAH]";
 
                 var param = new { npm = npm , semester = semester};
 
@@ -145,7 +145,7 @@ TBL_PRESENSI ON rekap_presensi.ID_Kelas = TBL_PRESENSI.ID_Kelas AND rekap_presen
             try
             {
                 conn = new SqlConnection(DBKoneksi.koneksi);
-                string query = @"SELECT SUM(TBL_MATAKULIAH.SKS) AS Total SKS
+                string query = @"SELECT SUM(TBL_MATAKULIAH.SKS) AS TotalSKS
                          FROM dbo.TBL_KURIKULUM as TBL_KURIKULUM INNER JOIN 
                          dbo.TBL_MATAKULIAH  as TBL_MATAKULIAH ON (TBL_KURIKULUM.ID_KURIKULUM = TBL_MATAKULIAH.ID_KURIKULUM) INNER JOIN 
                          dbo.TBL_TRANSKRIP_DETAIL as TBL_TRANSKRIP_DETAIL ON (TBL_MATAKULIAH.ID_MK = TBL_TRANSKRIP_DETAIL.ID_MK)INNER JOIN 
@@ -167,5 +167,73 @@ TBL_PRESENSI ON rekap_presensi.ID_Kelas = TBL_PRESENSI.ID_Kelas AND rekap_presen
                 conn.Dispose();
             }
         }
+
+
+
+
+        public dynamic GetMatakuliahSemua(string npm)
+        {
+            SqlConnection conn = new();
+            try
+            {
+                conn = new SqlConnection(DBKoneksi.koneksi);
+                string query = @"SELECT COUNT(SAMA) as JumlahMatkul FROM 
+(SELECT TBL_MATAKULIAH.NAMA_MK as MATAKULIAH, TBL_MATAKULIAH.KODE_MK as KODE, TBL_MATAKULIAH.SKS, coalesce(TBL_TRANSKRIP_DETAIL.NILAI,TBL_TRANSKRIP_DETAIL.NILAI,TBL_TRANSKRIP_DETAIL.NILAI,'-') as NILAI, TBL_MATAKULIAH.NILAI_LULUS 
+,(CASE WHEN TBL_TRANSKRIP_DETAIL.NILAI > TBL_MATAKULIAH.NILAI_LULUS THEN 1 
+              WHEN TBL_TRANSKRIP_DETAIL.NILAI = 'E' THEN 1
+     	       WHEN TBL_TRANSKRIP_DETAIL.NILAI is null THEN 1 
+              ELSE 0 END) AS sama 
+FROM  TBL_KURIKULUM INNER JOIN 
+                         TBL_MATAKULIAH ON (TBL_KURIKULUM.ID_KURIKULUM = TBL_MATAKULIAH.ID_KURIKULUM) INNER JOIN 
+                         TBL_TRANSKRIP_DETAIL ON (TBL_MATAKULIAH.ID_MK = TBL_TRANSKRIP_DETAIL.ID_MK)INNER JOIN 
+                         TBL_TRANSKRIP ON (TBL_TRANSKRIP_DETAIL.ID_TRANSKRIP = TBL_TRANSKRIP.ID_TRANSKRIP) 
+WHERE (TBL_KURIKULUM.ISCURRENT = 1) AND (TBL_TRANSKRIP.NPM = '" + @npm + "') AND (TBL_MATAKULIAH.KD_SIFAT_MK = 'W')  UNION SELECT TBL_MATAKULIAH.NAMA_MK as MATAKULIAH, TBL_MATAKULIAH.KODE_MK as KODE, TBL_MATAKULIAH.SKS, TBL_TRANSKRIP_DETAIL.NILAI, TBL_MATAKULIAH.NILAI_LULUS,(CASE WHEN TBL_TRANSKRIP_DETAIL.NILAI >= TBL_MATAKULIAH.NILAI_LULUS THEN 1 WHEN TBL_TRANSKRIP_DETAIL.NILAI = 'E' THEN 1 ELSE 0 END) AS sama FROM TBL_KURIKULUM INNER JOIN TBL_MATAKULIAH ON(TBL_KURIKULUM.ID_KURIKULUM = TBL_MATAKULIAH.ID_KURIKULUM) INNER JOIN TBL_TRANSKRIP_DETAIL ON(TBL_MATAKULIAH.ID_MK = TBL_TRANSKRIP_DETAIL.ID_MK)INNER JOIN TBL_TRANSKRIP ON(TBL_TRANSKRIP_DETAIL.ID_TRANSKRIP = TBL_TRANSKRIP.ID_TRANSKRIP) WHERE(TBL_KURIKULUM.ISCURRENT = 1) AND(TBL_TRANSKRIP.NPM = '" + @npm + "') AND(TBL_MATAKULIAH.KD_SIFAT_MK = 'P') AND(TBL_TRANSKRIP_DETAIL.NILAI IS NOT NULL) GROUP BY TBL_MATAKULIAH.NAMA_MK, TBL_MATAKULIAH.KODE_MK, TBL_MATAKULIAH.SKS, TBL_TRANSKRIP_DETAIL.NILAI, TBL_MATAKULIAH.NILAI_LULUS )A WHERE SAMA <> 1";
+
+                var param = new { npm = npm };
+
+                var data = conn.QuerySingleOrDefault<dynamic>(query, param);
+
+                return data;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+            finally
+            {
+                conn.Dispose();
+            }
+        }
+
+
+        public dynamic getNilaiE(string npm)
+        {
+            SqlConnection conn = new();
+            try
+            {
+                conn = new SqlConnection(DBKoneksi.koneksi);
+                string query = @" SELECT COUNT(TBL_MATAKULIAH.KODE_MK) as nilaiE FROM
+TBL_KURIKULUM INNER JOIN
+TBL_MATAKULIAH ON(TBL_KURIKULUM.ID_KURIKULUM = TBL_MATAKULIAH.ID_KURIKULUM) INNER JOIN
+TBL_TRANSKRIP_DETAIL ON(TBL_MATAKULIAH.ID_MK = TBL_TRANSKRIP_DETAIL.ID_MK) INNER JOIN
+TBL_TRANSKRIP ON(TBL_TRANSKRIP_DETAIL.ID_TRANSKRIP = TBL_TRANSKRIP.ID_TRANSKRIP)
+WHERE(TBL_KURIKULUM.ISCURRENT = 1) AND(TBL_TRANSKRIP.NPM = '" + @npm + "') AND((TBL_MATAKULIAH.KD_SIFAT_MK = 'W') OR(TBL_MATAKULIAH.KD_SIFAT_MK = 'P'))AND (TBL_TRANSKRIP_DETAIL.NILAI LIKE '%E%')";
+
+                var param = new { npm = npm };
+
+                var data = conn.QuerySingleOrDefault<dynamic>(query, param);
+
+                return data;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+            finally
+            {
+                conn.Dispose();
+            }
+        }
+       
     }
 }

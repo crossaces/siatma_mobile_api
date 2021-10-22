@@ -12,11 +12,11 @@ namespace siatma_mobile_api.DAO
             {
                 conn = new SqlConnection(DBKoneksi.koneksi);
                 string query = @"SELECT dbo.TBL_KELAS.KODE_MK AS KODE, dbo.TBL_KELAS.NAMA_MK AS MATAKULIAH, dbo.TBL_KELAS.KELAS AS KLS, dbo.MST_DOSEN.NAMA_DOSEN_LENGKAP AS DOSEN, 
-                      dbo.MST_RUANG.RUANG, COALESCE (REF_HARI.HARI + ' - ' + REF_SESI.SESI, REF_HARI.HARI + ' - ' + REF_SESI.SESI, REF_HARI.HARI + ' - ' + REF_SESI.SESI, '***') 
+                      dbo.MST_RUANG.RUANG, COALESCE (REF_HARI.HARI + ' - ' + REF_SESI.SESI, REF_HARI.HARI + ' - ' + REF_SESI.SESI, REF_HARI.HARI + ' - ' + REF_SESI.SESI, '-') 
                       AS [Jadwal 1], COALESCE (REF_HARI_1.HARI + ' - ' + REF_SESI_1.SESI, REF_HARI_1.HARI + ' - ' + REF_SESI_1.SESI, REF_HARI_1.HARI + ' - ' + REF_SESI_1.SESI, 
-                      '***') AS [Jadwal 2], COALESCE (REF_HARI_3.HARI + ' - ' + REF_SESI_2.SESI, REF_HARI_3.HARI + ' - ' + REF_SESI_2.SESI, 
-                      REF_HARI_3.HARI + ' - ' + REF_SESI_2.SESI, '***') AS [Jadwal 3], COALESCE (REF_HARI_2.HARI + ' - ' + REF_SESI_3.SESI, 
-                      REF_HARI_2.HARI + ' - ' + REF_SESI_3.SESI, REF_HARI_2.HARI + ' - ' + REF_SESI_3.SESI, '***') AS [Jadwal 4], dbo.TBL_KELAS.NAMA_MK
+                      '-') AS [Jadwal 2], COALESCE (REF_HARI_3.HARI + ' - ' + REF_SESI_2.SESI, REF_HARI_3.HARI + ' - ' + REF_SESI_2.SESI, 
+                      REF_HARI_3.HARI + ' - ' + REF_SESI_2.SESI, '-') AS [Jadwal 3], COALESCE (REF_HARI_2.HARI + ' - ' + REF_SESI_3.SESI, 
+                      REF_HARI_2.HARI + ' - ' + REF_SESI_3.SESI, REF_HARI_2.HARI + ' - ' + REF_SESI_3.SESI, '-') AS [Jadwal 4], dbo.TBL_KELAS.NAMA_MK
 FROM         dbo.REF_HARI AS REF_HARI_1 RIGHT OUTER JOIN
                       dbo.REF_HARI AS REF_HARI_2 RIGHT OUTER JOIN
                       dbo.REF_SESI RIGHT OUTER JOIN
@@ -32,7 +32,8 @@ FROM         dbo.REF_HARI AS REF_HARI_1 RIGHT OUTER JOIN
                       REF_HARI_1.ID_HARI = TBL_KELAS.ID_HARI2 LEFT OUTER JOIN
                       REF_HARI ON TBL_KELAS.ID_HARI1 = REF_HARI.ID_HARI LEFT OUTER JOIN
                       REF_SESI AS REF_SESI_2 ON dbo.TBL_KELAS.ID_SESI_KULIAH3 = REF_SESI_2.ID_SESI
-WHERE     (dbo.TBL_SEMESTER_AKADEMIK.SEMESTER_AKADEMIk = '" + @smt + "') AND (dbo.TBL_KRS.NPM = '" + @npm + "') and dbo.TBL_KELAS.ID_KELAS not in (select ID_KELAS_ASAL   FROM dbo.TBL_KRS INNER JOIN dbo.TBL_KELAS ON dbo.TBL_KRS.ID_KELAS = dbo.TBL_KELAS.ID_KELAS WHERE  (dbo.TBL_SEMESTER_AKADEMIK.SEMESTER_AKADEMIk = '" + @smt + "') and npm = '" + @npm + "' and id_kelas_asal is not null )";
+WHERE     (dbo.TBL_SEMESTER_AKADEMIK.SEMESTER_AKADEMIk = '" + @smt + "') AND (dbo.TBL_KRS.NPM = '" + @npm + "') and dbo.TBL_KELAS.ID_KELAS not in (select ID_KELAS_ASAL   FROM dbo.TBL_KRS INNER JOIN dbo.TBL_KELAS ON dbo.TBL_KRS.ID_KELAS = dbo.TBL_KELAS.ID_KELAS WHERE  (dbo.TBL_SEMESTER_AKADEMIK.SEMESTER_AKADEMIk = '" + @smt + "') and npm = '" + @npm + "' and id_kelas_asal is not null )" +
+"ORDER BY REF_HARI.ID_HARI, REF_SESI.ID_SESI, REF_HARI_1.ID_HARI, REF_SESI_1.ID_SESI, REF_HARI_3.ID_HARI, REF_SESI_2.ID_SESI,REF_HARI_2.ID_HARI, REF_SESI_3.ID_SESI";
 
                 var param = new { npm = npm, smt = smt };
 
