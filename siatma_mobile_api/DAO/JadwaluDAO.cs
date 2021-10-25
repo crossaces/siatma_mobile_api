@@ -52,8 +52,7 @@ namespace siatma_mobile_api.DAO
                           else convert(varchar,dbo.ref_sesi.akhir_unit_wkt/2)+'.30' END as [Keluar]  
                           FROM            REF_SESI INNER JOIN 
                           REF_PRODI ON REF_SESI.ID_PRODI = REF_PRODI.ID_PRODI 
-                          WHERE        (dbo.REF_PRODI.ID_PRODI = '07') and ref_sesi.jenis_sesi = 'Ujian' 
-                          order by dbo.ref_sesi.ID_SESI, dbo.ref_sesi.sesi";
+                          WHERE        (dbo.REF_PRODI.ID_PRODI = '" + prodi + "') and ref_sesi.jenis_sesi = 'Ujian' order by dbo.ref_sesi.ID_SESI, dbo.ref_sesi.sesi";
 
                 var param = new { prodi = prodi };
 
