@@ -21,7 +21,7 @@ dbo.MST_MHS_AKTIF.NAMA_MHS, dbo.MST_MHS_AKTIF.ALAMAT, dbo.MST_ORTU.ALAMAT_ORTU, 
                                 dbo.MST_ORTU ON dbo.MST_MHS_AKTIF.ID_ORTU = dbo.MST_ORTU.ID_ORTU LEFT OUTER JOIN
                                 dbo.REF_PRODI ON dbo.MST_MHS_AKTIF.ID_PRODI = dbo.REF_PRODI.ID_PRODI LEFT OUTER JOIN
                                 dbo.REF_FAKULTAS ON dbo.REF_PRODI.ID_FAKULTAS = dbo.REF_FAKULTAS.ID_FAKULTAS
-                                WHERE (dbo.MST_MHS_AKTIF.NPM = '@npm') AND KD_STATUS_MHS ='A'";
+                                WHERE (dbo.MST_MHS_AKTIF.NPM = '" + npm + "') AND KD_STATUS_MHS ='A'";
 
                 var param = new { npm = npm };
                 var data = conn.QuerySingleOrDefault<dynamic>(query, param);
