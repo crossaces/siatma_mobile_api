@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.IdentityModel.Tokens;
 using siatma_mobile_api.DAO;
 using siatma_mobile_api.Model;
@@ -27,7 +28,7 @@ namespace siatma_mobile_api.BM
             var ul = dao.GetDataMhs(username);
             if (ul != null)
             {
-                if (cekpasswordMhs(password, ul.PASSWORD)) 
+                if (cekpasswordMhs(password, ul.PASSWORD))
                 {
                     if (ul.KD_STATUS_MHS == "A")
                     {
@@ -49,11 +50,11 @@ namespace siatma_mobile_api.BM
                         var token = tokenHandler.CreateToken(tokenDescriptor);
                         var gentoken = tokenHandler.WriteToken(token);
 
-                        
+
                         var id_prodi = data.ID_PRODI;
                         var foto = data.FOTO;
                         var thn_masuk = data.THN_MASUK;
-                        var npm = data.NPM;                   
+                        var npm = data.NPM;
                         var panggilan = data.PANGGILAN;
 
                         output.token = gentoken;
@@ -62,7 +63,7 @@ namespace siatma_mobile_api.BM
                         output.FOTO = foto;
                         output.ID_PRODI = id_prodi;
                         output.THN_MASUK = thn_masuk;
-                    
+
                         output.NPM = npm;
                         output.PANGGILAN = panggilan;
 
@@ -72,7 +73,7 @@ namespace siatma_mobile_api.BM
                         output.token = "";
                         output.status = false;
                         output.pesan = "Gagal Login! Status Mahasiswa tidak aktif";
-                       
+
                     }
                 }
                 else
@@ -80,7 +81,7 @@ namespace siatma_mobile_api.BM
                     output.token = "";
                     output.status = false;
                     output.pesan = "Gagal Login! Password salah";
-                  
+
                 }
             }
             else
@@ -88,29 +89,42 @@ namespace siatma_mobile_api.BM
                 output.token = "";
                 output.status = false;
                 output.pesan = "Gagal Login! Data tidak ditemukan.";
-             
+
             }
 
             return output;
         }
-        public OutPutApi updatePasswordMahasiswa(string npm, string password,string passwordlama)
+        public OutPutApi updatePasswordMahasiswa(string npm, string password, string passwordlama)
         {
             outputapi.status = true;
             outputapi.pesan = "Berhasil Update Password";
             var ul = dao.GetDataMhs(npm);
+
+
+
             if (ul != null)
             {
                 if (cekpasswordMhs(passwordlama, ul.PASSWORD))
                 {
-                    string pwd = getRIPEMD160(password);
-                    byte[] pwd1 = getMD5(password);
 
-                    //dao.updatepasswordmFakultas();
-                    dao.updatepasswordmWarehouse(npm, pwd, pwd1);
-                    dao.updatepasswordmFakultas(npm, pwd, pwd1,ul.ID_PRODI);
+                    if (cekPasswordLemah(password))
+                    {
+                        string pwd = getRIPEMD160(password);
+                        byte[] pwd1 = getMD5(password);
 
-                    outputapi.pesan = "Berhasil Ganti Password";
-                    outputapi.data = "";
+                        //dao.updatepasswordmFakultas();
+                        dao.updatepasswordmWarehouse(npm, pwd, pwd1);
+                        dao.updatepasswordmFakultas(npm, pwd, pwd1, ul.ID_PRODI);
+
+                        outputapi.pesan = "Berhasil Ganti Password";
+                        outputapi.data = "";
+                    }
+                    else
+                    {
+                        outputapi.status = false;
+                        outputapi.pesan = "Password Lemah";
+                        outputapi.data = "";
+                    }
                 }
                 else
                 {
@@ -118,12 +132,27 @@ namespace siatma_mobile_api.BM
                     outputapi.pesan = "Password Lama Salah";
                     outputapi.data = "";
                 }
+               
             }
             return outputapi;
         }
 
 
-        public string CekStrongPass(string pass)
+        public bool cekPasswordLemah(string password)
+        {
+            var regex = @"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*()?.,;]).{8,}$";
+
+            Match match = Regex.Match(password, regex, RegexOptions.IgnoreCase);
+            if (match.Success)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+
+        public string cekStrongPass(string pass)
         {
             int temp = 0;
             bool kapital = false;

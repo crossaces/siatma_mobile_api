@@ -56,6 +56,27 @@ namespace siatma_mobile_api.BM
             return output;
         }
 
+        public OutPutApi getInfoPembayaran(string npm)
+        {
+
+            output.status = true;
+            output.pesan = "Berhasil Mengambil data";
+
+            var data = dao.GetInfoPembayaran(npm);
+            if (data != null)
+            {
+                output.pesan = "Berhasil ditemukan";
+                output.data = data;
+            }
+            else
+            {
+                output.status = false;
+                output.pesan = "Data tidak ditemukan";
+            }
+
+            return output;
+        }
+
         public OutPutApi getInfoMahasiswa(string npm)
         {
 

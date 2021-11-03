@@ -1,24 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using siatma_mobile_api.BM;
-using siatma_mobile_api.DAO;
 
 namespace siatma_mobile_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DaftarHSController : ControllerBase
+    public class FormEController : ControllerBase
     {
-        DaftarHSBM bm;
-        
-        public DaftarHSController()
+
+        FormEvaluasiBM bm;
+
+        public FormEController()
         {
-            bm = new DaftarHSBM();
-          
+            bm = new FormEvaluasiBM();
+
 
         }
-        [HttpGet("DHS")]
+        [HttpGet("Evaluasi")]
         public ActionResult DaftarHasilStudi()
         {
             try
@@ -26,7 +29,7 @@ namespace siatma_mobile_api.Controllers
                 var npm = User.Claims
                         .Where(c => c.Type == "username")
                             .Select(c => c.Value).SingleOrDefault();
-                var data = bm.GetDaftarHasilstudiBM(npm);
+                var data = bm.GetDataEvaluasiBM(npm);
                 return Ok(data);
             }
             catch (Exception ex)
