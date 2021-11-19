@@ -12,6 +12,7 @@ namespace siatma_mobile_api.DAO
             {
                 conn = new SqlConnection(DBKoneksi.koneksi);
                 string query = @"SELECT dbo.TBL_KELAS.KODE_MK AS KODE, dbo.TBL_KELAS.NAMA_MK AS MATAKULIAH, dbo.TBL_KELAS.KELAS AS KLS, dbo.MST_DOSEN.NAMA_DOSEN_LENGKAP AS DOSEN, 
+                         COALESCE (e.NAMA_DOSEN_LENGKAP, e.NAMA_DOSEN_LENGKAP, e.NAMA_DOSEN_LENGKAP, '-') as DOSEN2,
                       dbo.MST_RUANG.RUANG, COALESCE (REF_HARI.HARI + ' - ' + REF_SESI.SESI, REF_HARI.HARI + ' - ' + REF_SESI.SESI, REF_HARI.HARI + ' - ' + REF_SESI.SESI, '-') 
                       AS [Jadwal 1], COALESCE (REF_HARI_1.HARI + ' - ' + REF_SESI_1.SESI, REF_HARI_1.HARI + ' - ' + REF_SESI_1.SESI, REF_HARI_1.HARI + ' - ' + REF_SESI_1.SESI, 
                       '-') AS [Jadwal 2], COALESCE (REF_HARI_3.HARI + ' - ' + REF_SESI_2.SESI, REF_HARI_3.HARI + ' - ' + REF_SESI_2.SESI, 
@@ -24,7 +25,8 @@ FROM         dbo.REF_HARI AS REF_HARI_1 RIGHT OUTER JOIN
                       dbo.TBL_KRS INNER JOIN
                       dbo.TBL_KELAS ON dbo.TBL_KRS.ID_KELAS = dbo.TBL_KELAS.ID_KELAS INNER JOIN
                       dbo.TBL_SEMESTER_AKADEMIK ON dbo.TBL_KELAS.ID_TAHUN_AKADEMIK = dbo.TBL_SEMESTER_AKADEMIK.ID_TAHUN_AKADEMIK AND 
-                      dbo.TBL_KELAS.NO_SEMESTER = dbo.TBL_SEMESTER_AKADEMIK.NO_SEMESTER ON dbo.MST_DOSEN.NPP = dbo.TBL_KELAS.NPP_DOSEN1 INNER JOIN
+                      dbo.TBL_KELAS.NO_SEMESTER = dbo.TBL_SEMESTER_AKADEMIK.NO_SEMESTER ON dbo.MST_DOSEN.NPP = dbo.TBL_KELAS.NPP_DOSEN1 LEFT OUTER JOIN
+                      dbo.MST_DOSEN AS e  ON e.NPP = dbo.TBL_KELAS.NPP_DOSEN2 INNER JOIN
                       dbo.MST_RUANG ON dbo.TBL_KELAS.RUANG1 = dbo.MST_RUANG.RUANG LEFT OUTER JOIN
                       dbo.REF_SESI AS REF_SESI_3 ON dbo.TBL_KELAS.ID_SESI_KULIAH4 = REF_SESI_3.ID_SESI LEFT OUTER JOIN
                       dbo.REF_SESI AS REF_SESI_1 ON dbo.TBL_KELAS.ID_SESI_KULIAH2 = REF_SESI_1.ID_SESI ON dbo.REF_SESI.ID_SESI = dbo.TBL_KELAS.ID_SESI_KULIAH1 LEFT OUTER JOIN

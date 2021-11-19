@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using siatma_mobile_api.BM;
+using siatma_mobile_api.Model;
 
 namespace siatma_mobile_api.Controllers
 {
@@ -22,7 +23,7 @@ namespace siatma_mobile_api.Controllers
 
         }
         [HttpGet("Evaluasi")]
-        public ActionResult DaftarHasilStudi()
+        public ActionResult GetDataEvaluasiMahasiswa()
         {
             try
             {
@@ -30,6 +31,71 @@ namespace siatma_mobile_api.Controllers
                         .Where(c => c.Type == "username")
                             .Select(c => c.Value).SingleOrDefault();
                 var data = bm.GetDataEvaluasiBM(npm);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpGet("Form")]
+        public ActionResult GetDataFormEvaluasi()
+        {
+            try
+            {
+                var npm = User.Claims
+                        .Where(c => c.Type == "username")
+                            .Select(c => c.Value).SingleOrDefault();
+                var data = bm.GetDataFormBM();
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+
+        [HttpPost("Submit")]
+        public ActionResult SubmitForm(Submit submit)
+        {
+            try
+            {               
+                var data = bm.SubmitFormBM(submit.Idkrs,submit.Jawaban);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("Pertanyaan")]
+        public ActionResult GetPertanyaan()
+        {
+            try
+            {
+            
+                var data = bm.GetDataPertanyaanBM();
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("isiform")]
+        public ActionResult isiJawaban([FromBody] List<FormEvaluasi> jsonData)
+        {
+            try
+            {
+                
+                var data = bm.Isijawaban(jsonData); 
+
                 return Ok(data);
             }
             catch (Exception ex)

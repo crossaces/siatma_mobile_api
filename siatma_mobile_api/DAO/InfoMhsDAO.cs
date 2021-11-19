@@ -45,7 +45,7 @@ namespace siatma_mobile_api.DAO
 rekap_presensi.hadir, rekap_presensi.Alpha, rekap_presensi.Ijin, rekap_presensi.Total
  FROM TBL_KELAS INNER JOIN rekap_presensi ON rekap_presensi.ID_Kelas = TBL_KELAS.ID_KELAS INNER JOIN
 TBL_PRESENSI ON rekap_presensi.ID_Kelas = TBL_PRESENSI.ID_Kelas AND rekap_presensi.ID_Kelas = TBL_PRESENSI.ID_Kelas AND rekap_presensi.NPM = TBL_PRESENSI.NPM INNER JOIN
- TBL_SEMESTER_AKADEMIK ON TBL_SEMESTER_AKADEMIK.NO_SEMESTER = TBL_KELAS.NO_SEMESTER AND TBL_SEMESTER_AKADEMIK.ID_TAHUN_AKADEMIK = TBL_KELAS.ID_TAHUN_AKADEMIK WHERE (TBL_PRESENSI.NPM = '" + @npm + "')and(SEMESTER_AKADEMIk= '" + @semester+ "') ORDER BY [MATA KULIAH]";
+ TBL_SEMESTER_AKADEMIK ON TBL_SEMESTER_AKADEMIK.NO_SEMESTER = TBL_KELAS.NO_SEMESTER AND TBL_SEMESTER_AKADEMIK.ID_TAHUN_AKADEMIK = TBL_KELAS.ID_TAHUN_AKADEMIK WHERE (TBL_PRESENSI.NPM = @npm )and(SEMESTER_AKADEMIk=@semester) ORDER BY [MATA KULIAH]";
 
                 var param = new { npm = npm , semester = semester};
 
@@ -212,7 +212,7 @@ TBL_PRESENSI ON rekap_presensi.ID_Kelas = TBL_PRESENSI.ID_Kelas AND rekap_presen
             try
             {
                 conn = new SqlConnection(DBKoneksi.koneksi);
-                string query = @"select l.keterangan+' Semester '+s.keterangan+' '+substring(l.smt,0,5) [Keterangan Pembayaran], l.total[Yang Harus Dibayar], l.total_bayar [Sudah Dibayar], l.kurang[Kekurangan], CASE WHEN l.kurang = 0 THEN 'Lunas' END as Status
+                string query = @"select l.keterangan+' Semester '+s.keterangan+' '+substring(l.smt,0,5) [Keterangan Pembayaran], l.total[Yang Harus Dibayar], l.total_bayar [Sudah Dibayar], l.kurang[Kekurangan], CASE WHEN l.kurang = 0 THEN 'Lunas' Else 'Belum Lunas' END as Status
                 from dbo.laporan_pembayaran_mhs l join dbo.refSemester s 
                 on substring(l.smt,5,1) = s.idnya where npm =@npm order by l.smt asc";
 
