@@ -73,7 +73,7 @@ namespace siatma_mobile_api.DAO
             
             using(SqlConnection conn = new SqlConnection(DBKoneksi.koneksi)) { 
                 
-                string query = @"SELECT p.ID_JENIS_PERTANYAAN as ID_Jenis_Pertanyaan, p.id_pertanyaan as ID_Pertanyaan, p.soal as Soal from TBL_PERTANYAAN p 
+                string query = @"SELECT row_number() OVER (ORDER BY p.id_pertanyaan) Nomor, p.ID_JENIS_PERTANYAAN as ID_Jenis_Pertanyaan, p.id_pertanyaan as ID_Pertanyaan, p.soal as Soal from TBL_PERTANYAAN p 
                 INNER join TBL_FORM_EVALUASI f on p.ID_FORM_EVALUASI=f.ID_FORM_EVALUASI  where p.ID_FORM_EVALUASI=(Select ID_FORM_EVALUASI FROM TBL_FORM_EVALUASI WHERE IS_AKTIF = 'True')";
 
 

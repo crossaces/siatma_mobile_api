@@ -6,6 +6,7 @@ namespace siatma_mobile_api.Model
 {
     public class Pertanyaan
     {
+        public string Nomor { get; set; }
         public int ID_Jenis_Pertanyaan { get; set; }
         public int ID_PERTANYAAN { get; set; }
         public IList<Jawaban> Jawaban { get; set; }
