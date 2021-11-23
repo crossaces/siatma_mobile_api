@@ -39,7 +39,7 @@ namespace siatma_mobile_api.DAO
                 conn = new SqlConnection(DBKoneksi.koneksi);
 
                 string query = @"SELECT dbo.MST_MHS_AKTIF.NPM, SUBSTRING(dbo.MST_MHS_AKTIF.NAMA_MHS,1,charindex(' ',dbo.MST_MHS_AKTIF.NAMA_MHS)-1) AS PANGGILAN,
-dbo.MST_MHS_AKTIF.NAMA_MHS as NAMA_MHS, dbo.MST_MHS_AKTIF.ALAMAT, dbo.MST_ORTU.ALAMAT_ORTU, dbo.MST_MHS_AKTIF.TMP_LAHIR, dbo.MST_MHS_AKTIF.TGL_LAHIR, YEAR(GETDATE()) - dbo.MST_MHS_AKTIF.THN_MASUK AS lama, dbo.MST_MHS_AKTIF.ID_PRODI, dbo.MST_MHS_AKTIF.THN_MASUK,
+                                dbo.MST_MHS_AKTIF.NAMA_MHS as NAMA_MHS, dbo.MST_MHS_AKTIF.ALAMAT, dbo.MST_ORTU.ALAMAT_ORTU, dbo.MST_MHS_AKTIF.TMP_LAHIR, dbo.MST_MHS_AKTIF.TGL_LAHIR, YEAR(GETDATE()) - dbo.MST_MHS_AKTIF.THN_MASUK AS lama, dbo.MST_MHS_AKTIF.ID_PRODI, dbo.MST_MHS_AKTIF.THN_MASUK,
                                 dbo.MST_MHS_AKTIF.KD_STATUS_MHS, dbo.MST_MHS_FOTO.FOTO, dbo.REF_PRODI.PRODI, dbo.REF_FAKULTAS.FAKULTAS
                                 FROM dbo.MST_MHS_AKTIF LEFT OUTER JOIN
                                 dbo.MST_MHS_FOTO ON dbo.MST_MHS_AKTIF.NPM = dbo.MST_MHS_FOTO.NPM LEFT OUTER JOIN

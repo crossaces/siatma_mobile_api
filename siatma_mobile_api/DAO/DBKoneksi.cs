@@ -12,7 +12,7 @@
 
         public static string connFBE = "server=192.168.15.156;database=siatma_fbe;user id=spkp_dev;password=spkp123!";
 
-        public static string connFT= "server=192.168.15.156;database=siatma_ft;user id=spkp_dev;password=spkp123!";
+        public static string connFT = "server=192.168.15.156;database=siatma_ft;user id=spkp_dev;password=spkp123!";
 
         public static string connFISIP = "server=192.168.15.156;database=siatma_fisip;user id=spkp_dev;password=spkp123!";
 

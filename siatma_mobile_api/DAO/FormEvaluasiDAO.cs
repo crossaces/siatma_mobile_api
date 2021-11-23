@@ -18,14 +18,14 @@ namespace siatma_mobile_api.DAO
                 string query = @"SELECT DISTINCT 
                       sa.SEMESTER_AKADEMIK AS SEMESTER, k.KODE_MK AS KODE, k.NAMA_MK AS MATAKULIAH, k.KELAS,d.NAMA_DOSEN_LENGKAP AS DOSEN, 
 					  COALESCE (e.NAMA_DOSEN_LENGKAP, e.NAMA_DOSEN_LENGKAP, e.NAMA_DOSEN_LENGKAP, '-') as DOSEN_2, KR.ID_KRS,
-					  CASE WHEN (SELECT id_krs FROM dbo.TBL_JAWABAN_EVALUASI where id_krs = KR.id_krs) > 0 THEN 'True' Else 'False' END as Status
-                        FROM         TBL_KRS AS KR INNER JOIN
+					  CASE WHEN (SELECT id_krs FROM dbo.TBL_JAWABAN_EVALUASI where id_krs = KR.id_krs) > 0 THEN CONVERT(BIT, 1) Else CONVERT(BIT, 0) END as Status
+                      FROM TBL_KRS AS KR INNER JOIN
                       TBL_KELAS AS k ON k.ID_KELAS = KR.ID_KELAS INNER JOIN
                       TBL_SEMESTER_AKADEMIK_EVALUASI AS sa ON k.ID_TAHUN_AKADEMIK = sa.ID_TAHUN_AKADEMIK AND k.NO_SEMESTER = sa.NO_SEMESTER INNER JOIN
                       MST_DOSEN AS d ON d.NPP = k.NPP_DOSEN1 INNER JOIN
                       REF_DETAIL_EVALUASI ON k.ID_KELAS = REF_DETAIL_EVALUASI.ID_KELAS left outer JOIN
                       MST_DOSEN as e ON k.NPP_DOSEN2 = e.NPP
-                        WHERE (sa.ISCURRENT = 1) and (KR.NPM = @npm) order by ID_KRS";
+                      WHERE (sa.ISCURRENT = 1) and (KR.NPM = @npm) order by ID_KRS";
 
                 var param = new { npm = npm };
 
