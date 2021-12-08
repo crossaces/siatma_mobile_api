@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using siatma_mobile_api.BM;
+using siatma_mobile_api.DAO;
 
 namespace siatma_mobile_api.Controllers
 {
@@ -10,12 +11,13 @@ namespace siatma_mobile_api.Controllers
     public class InfoController : ControllerBase
     {
         InfoMhsBm bm;
-        
-        
+        MhsDAO dao;
+      
+
         public InfoController()
         {
             bm = new InfoMhsBm();
-            
+            dao = new MhsDAO();
         }
 
         [HttpGet("akademik")]
@@ -28,6 +30,27 @@ namespace siatma_mobile_api.Controllers
                             .Select(c => c.Value).SingleOrDefault();
                 
                 var data = bm.GetTahunAkademik(masuk, prodi);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+
+        [HttpGet("berita")]
+        public ActionResult Berita()
+        {
+            try
+            {
+                var npm = User.Claims
+                        .Where(c => c.Type == "username")
+                            .Select(c => c.Value).SingleOrDefault();
+
+                var mhs = dao.GetDataPrfMhs(npm);
+                var data = bm.getBeritaBM(mhs.ID_PRODI, mhs.ID_FAKULTAS);
                 return Ok(data);
             }
             catch (Exception ex)
