@@ -175,7 +175,7 @@ TBL_PRESENSI ON rekap_presensi.ID_Kelas = TBL_PRESENSI.ID_Kelas AND rekap_presen
             try
             {
                 conn = new SqlConnection(DBKoneksi.koneksi);
-                string query = @"SELECT ID_BERITA_MHS,ID_FAKULTAS,ID_PRODI,JUDUL,DESKRIPSI,TGL_MULAI, TGL_AKHIR                     
+                string query = @"SELECT ID_BERITA_MHS,ID_FAKULTAS,ID_PRODI,JUDUL,DESKRIPSI,TGL_MULAI, TGL_AKHIR, GAMBAR, LINK                     
                               FROM dbo.TBL_BERITA_MHS where ID_FAKULTAS = @fakultas and ID_PRODI = @prodi or ID_FAKULTAS = 0 and ID_PRODI = '0' or ID_FAKULTAS = @fakultas and ID_PRODI = '0' and   GETDATE() BETWEEN TGL_MULAI AND TGL_AKHIR";
 
                 var param = new { prodi = prodi, fakultas = fakultas };

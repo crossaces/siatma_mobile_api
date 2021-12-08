@@ -18,7 +18,8 @@ namespace siatma_mobile_api.Model
     public class Jawaban
     {
         public string Text{ get; set; }
-
+        
+        public int ID_JAWABAN { get; set; }
         public int ID_PERTANYAAN { get; set; }
         public int  Nilai { get; set; }
     }

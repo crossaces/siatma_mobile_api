@@ -63,14 +63,17 @@ namespace siatma_mobile_api.Controllers
         public ActionResult SubmitForm(Submit submit)
         {
             try
-            {               
-                var data = bm.SubmitFormBM(submit.Idkrs,submit.Jawaban);
+            {
+                var data = bm.SubmitFormBM(submit.Idkrs, submit.Jawaban);
+                Task.Run(() => bm.SumBM(submit.Idkrs));                              
                 return Ok(data);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
+
+
         }
 
         [HttpGet("Pertanyaan")]

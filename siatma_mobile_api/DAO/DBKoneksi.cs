@@ -23,8 +23,8 @@
         //public static string koneksi = "Server=202.14.92.208;Database=SIATMA_UAJY;User Id=spkp_dev;Password=spkp123!";
 
 
-
         //public static string connFH = "Server=202.14.92.208;Database=SIATMA_FH;User Id=spkp_dev;Password=spkp123!";
+
 
         //public static string connFTI = "Server=202.14.92.208;Database=SIATMA_FTI;User Id=spkp_dev;Password=spkp123!";
 

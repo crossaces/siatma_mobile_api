@@ -69,13 +69,19 @@ namespace siatma_mobile_api.BM
 
             output.status =false;
             output.pesan = "Gagal Submit";
+            //List<Pertanyaan> pertanyaan;
+            //List<Jawaban> jawabantemp;
+            //List<Jawaban> jawabantquery;
+            //pertanyaan = dao.GetDataPertanyaan();
+            //jawabantemp = dao.GetDataJawaban();
 
-            output.status = true;
-            output.pesan = "Berhasil Submit";
+
             if (idkrs != null)
             {
-                
+                output.status = true;
+                output.pesan = "Berhasil Submit";
                 output.data = dao.SubmitForm(idkrs,jawaban);
+              
             }
            
 
@@ -83,7 +89,28 @@ namespace siatma_mobile_api.BM
         }
 
 
-        public OutPutApi GetDataPertanyaanBM()
+        public void SumBM(string idkrs)
+        {
+
+          
+            List<Pertanyaan> pertanyaan;
+            List<Jawaban> jawabantemp;
+            List<Jawaban> jawabantquery;
+            pertanyaan = dao.GetDataPertanyaan();
+            jawabantemp = dao.GetDataJawaban();
+
+            foreach (var row in pertanyaan)
+            {
+                jawabantquery = jawabantemp.Where(x => x.ID_PERTANYAAN == row.ID_PERTANYAAN).ToList();
+
+                foreach (var jawab in jawabantquery)
+                {
+                    dao.SUM(idkrs, row.ID_PERTANYAAN, jawab.ID_JAWABAN, jawab.Nilai);
+                }
+
+            }
+        }
+public OutPutApi GetDataPertanyaanBM()
         {
 
             output.status = true;
