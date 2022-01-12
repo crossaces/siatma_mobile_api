@@ -14,7 +14,7 @@ namespace siatma_mobile_api.DAO
             {
                 conn = new SqlConnection(DBKoneksi.koneksi);
                 string query = @" SELECT TBL_KELAS.NAMA_MK AS[MATA KULIAH], TBL_KELAS.KELAS AS KLS,
-                          coalesce(TBL_PRESENSI.Status1, TBL_PRESENSI.Status1, TBL_PRESENSI.Status1,'-') AS[1],
+                         coalesce(TBL_PRESENSI.Status1, TBL_PRESENSI.Status1, TBL_PRESENSI.Status1,'-') AS[1],
                          coalesce(TBL_PRESENSI.Status2, TBL_PRESENSI.Status2, TBL_PRESENSI.Status2,'-') AS[2], 
                          coalesce(TBL_PRESENSI.Status3, TBL_PRESENSI.Status3, TBL_PRESENSI.Status3,'-') AS[3], 
                          coalesce(TBL_PRESENSI.Status4, TBL_PRESENSI.Status4, TBL_PRESENSI.Status4,'-') AS[4], 
@@ -30,9 +30,9 @@ namespace siatma_mobile_api.DAO
                          coalesce(TBL_PRESENSI.Status14, TBL_PRESENSI.Status14, TBL_PRESENSI.Status14,'-') AS[14], 
                          coalesce(TBL_PRESENSI.Status15, TBL_PRESENSI.Status15, TBL_PRESENSI.Status15,'-') AS[15], 
                          coalesce(TBL_PRESENSI.Status16, TBL_PRESENSI.Status16, TBL_PRESENSI.Status16,'-') AS[16], 
-                      coalesce(TBL_PRESENSI.Status17, TBL_PRESENSI.Status17, TBL_PRESENSI.Status17,'-') AS[17],                          
-					  coalesce(TBL_PRESENSI.Status18, TBL_PRESENSI.Status18, TBL_PRESENSI.Status18,'-') AS[18], 
-                    coalesce(TBL_PRESENSI.Status19, TBL_PRESENSI.Status19, TBL_PRESENSI.Status19,'-') AS[19], 
+                         coalesce(TBL_PRESENSI.Status17, TBL_PRESENSI.Status17, TBL_PRESENSI.Status17,'-') AS[17],                          
+					     coalesce(TBL_PRESENSI.Status18, TBL_PRESENSI.Status18, TBL_PRESENSI.Status18,'-') AS[18], 
+                         coalesce(TBL_PRESENSI.Status19, TBL_PRESENSI.Status19, TBL_PRESENSI.Status19,'-') AS[19], 
                          coalesce(TBL_PRESENSI.Status20, TBL_PRESENSI.Status20, TBL_PRESENSI.Status20,'-') AS[20], 
                          coalesce(TBL_PRESENSI.Status21, TBL_PRESENSI.Status21, TBL_PRESENSI.Status21,'-') AS[21],                         
 						 coalesce(TBL_PRESENSI.Status22, TBL_PRESENSI.Status22, TBL_PRESENSI.Status22,'-') AS[22], 
@@ -42,10 +42,11 @@ namespace siatma_mobile_api.DAO
                          coalesce(TBL_PRESENSI.Status26, TBL_PRESENSI.Status26, TBL_PRESENSI.Status26,'-') AS[26], 
                          coalesce(TBL_PRESENSI.Status27, TBL_PRESENSI.Status27, TBL_PRESENSI.Status27,'-') AS[27], 
                          coalesce(TBL_PRESENSI.Status28, TBL_PRESENSI.Status28, TBL_PRESENSI.Status28,'-') AS[28],
-rekap_presensi.hadir, rekap_presensi.Alpha, rekap_presensi.Ijin, rekap_presensi.Total
- FROM TBL_KELAS INNER JOIN rekap_presensi ON rekap_presensi.ID_Kelas = TBL_KELAS.ID_KELAS INNER JOIN
-TBL_PRESENSI ON rekap_presensi.ID_Kelas = TBL_PRESENSI.ID_Kelas AND rekap_presensi.ID_Kelas = TBL_PRESENSI.ID_Kelas AND rekap_presensi.NPM = TBL_PRESENSI.NPM INNER JOIN
- TBL_SEMESTER_AKADEMIK ON TBL_SEMESTER_AKADEMIK.NO_SEMESTER = TBL_KELAS.NO_SEMESTER AND TBL_SEMESTER_AKADEMIK.ID_TAHUN_AKADEMIK = TBL_KELAS.ID_TAHUN_AKADEMIK WHERE (TBL_PRESENSI.NPM = @npm )and(SEMESTER_AKADEMIk=@semester) ORDER BY [MATA KULIAH]";
+    rekap_presensi.hadir, rekap_presensi.Alpha, rekap_presensi.Ijin, rekap_presensi.Total
+    FROM TBL_KELAS INNER JOIN rekap_presensi ON rekap_presensi.ID_Kelas = TBL_KELAS.ID_KELAS INNER JOIN
+    TBL_PRESENSI ON rekap_presensi.ID_Kelas = TBL_PRESENSI.ID_Kelas AND rekap_presensi.ID_Kelas = TBL_PRESENSI.ID_Kelas AND rekap_presensi.NPM = TBL_PRESENSI.NPM INNER JOIN
+    TBL_SEMESTER_AKADEMIK ON TBL_SEMESTER_AKADEMIK.NO_SEMESTER = TBL_KELAS.NO_SEMESTER AND TBL_SEMESTER_AKADEMIK.ID_TAHUN_AKADEMIK = TBL_KELAS.ID_TAHUN_AKADEMIK WHERE (TBL_PRESENSI.NPM = @npm )
+    and(SEMESTER_AKADEMIk=@semester) ORDER BY [MATA KULIAH]";
 
                 var param = new { npm = npm , semester = semester};
 
@@ -113,7 +114,7 @@ TBL_PRESENSI ON rekap_presensi.ID_Kelas = TBL_PRESENSI.ID_Kelas AND rekap_presen
             try
             {
                 conn = new SqlConnection(DBKoneksi.koneksi);
-                string query = @"SELECT     t.NPM, t.NAMA_MHS, p.PRODI, k.KONSENTRASI_STUDI, ROUND(ip_kumulatif.ipk , 2) as ipk, d.NAMA_DOSEN_LENGKAP
+                string query = @"SELECT     t.NPM, t.NAMA_MHS, p.PRODI, k.KONSENTRASI_STUDI, ROUND(tr.ipk , 2) as ipk, d.NAMA_DOSEN_LENGKAP
                                 FROM         dbo.MST_MHS_AKTIF AS t INNER JOIN
                       dbo.REF_PRODI AS p ON p.ID_PRODI = t.ID_PRODI LEFT OUTER JOIN
                       dbo.TBL_KONSENTRASI_STUDI AS k ON t.ID_KONSENTRASI = k.ID_KONSENTRASI_STUDI INNER JOIN

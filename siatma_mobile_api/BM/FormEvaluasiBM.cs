@@ -69,11 +69,7 @@ namespace siatma_mobile_api.BM
 
             output.status =false;
             output.pesan = "Gagal Submit";
-            //List<Pertanyaan> pertanyaan;
-            //List<Jawaban> jawabantemp;
-            //List<Jawaban> jawabantquery;
-            //pertanyaan = dao.GetDataPertanyaan();
-            //jawabantemp = dao.GetDataJawaban();
+        
 
 
             if (idkrs != null)
@@ -110,7 +106,7 @@ namespace siatma_mobile_api.BM
 
             }
         }
-public OutPutApi GetDataPertanyaanBM()
+        public OutPutApi GetDataPertanyaanBM()
         {
 
             output.status = true;
