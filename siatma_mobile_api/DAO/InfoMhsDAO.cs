@@ -114,11 +114,12 @@ namespace siatma_mobile_api.DAO
             try
             {
                 conn = new SqlConnection(DBKoneksi.koneksi);
-                string query = @"SELECT     t.NPM, t.NAMA_MHS, p.PRODI, k.KONSENTRASI_STUDI, ROUND(tr.ipk , 2) as ipk, d.NAMA_DOSEN_LENGKAP
+                string query = @"SELECT TOP 1 t.NPM, t.NAMA_MHS, p.PRODI, k.KONSENTRASI_STUDI, ROUND(tr.ipk , 2) as ipk, d.NAMA_DOSEN_LENGKAP
                                 FROM         dbo.MST_MHS_AKTIF AS t INNER JOIN
                       dbo.REF_PRODI AS p ON p.ID_PRODI = t.ID_PRODI LEFT OUTER JOIN
                       dbo.TBL_KONSENTRASI_STUDI AS k ON t.ID_KONSENTRASI = k.ID_KONSENTRASI_STUDI INNER JOIN
                       dbo.TBL_TRANSKRIP AS tr ON t.NPM = tr.NPM INNER JOIN
+                      dbo.ip_kumulatif ON t.NPM = ip_kumulatif.npm LEFT OUTER JOIN
                       dbo.MST_DOSEN AS d ON t.NPP_PEMBIMBING_AKADEMIK = d.NPP
                       WHERE   (t.NPM = '" + @npm + "')";
 
